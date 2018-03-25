@@ -1,24 +1,33 @@
 class ProductList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      products: [],
-    }; 
-  }
+  state = {
+    products: [],
+  };
 
   componentDidMount() {
-    this.setState({ products: Seed.products });
+    this.setState({products: Seed.products});
   }
-  
-  handleProductUpVote(productId) {
-    console.log(productId + ' was upvoted.');
+
+  handleProductUpVote = (productId) => {
+    const nextProducts = this.state.products.map((product) => {
+        if (product.id === productId) {
+          return Object.assign({}, product, {
+            votes: product.votes + 1
+          });
+        } else {
+          return product;
+        }
+      });
+    this.setState({
+      products: nextProducts,
+    });
   }
   render() {
     //sort products from Seed.products and place in products variable
     const products = this.state.products.sort((a, b) => (b.votes - a.votes));
 
     // place the sorted products into the component
-    const productComponents = products.map((product) => (<Product
+    const productComponents = products.map((product) => (
+    <Product
       key={'product-' + product.id}
       id={product.id}
       title={product.title}
@@ -27,7 +36,10 @@ class ProductList extends React.Component {
       votes={product.votes}
       submitterAvatarUrl={product.submitterAvatarUrl}
       productImageUrl={product.productImageUrl}
-      onVote={this.handleProductUpVote}/>));
+      onVote={this.handleProductUpVote}
+      />
+    )
+  );
     return (
       <div className='ui unstackable items'>
         {productComponents}
@@ -37,14 +49,9 @@ class ProductList extends React.Component {
 }
 
 class Product extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleUpVote = this.handleUpVote.bind(this);
-  }
-  // Inside `Product`
-  handleUpVote() {
-    this.props.onVote(this.props.id);
-  }
+  handleUpVote = () => (
+    this.props.onVote(this.props.id)
+);
 
   render() {
     return (
@@ -52,8 +59,8 @@ class Product extends React.Component {
         <div className='image'>
           <img src={this.props.productImageUrl}/>
         </div>
-       {/* Inside `render` for Product` */}
-       <div className='middle aligned content'>
+        {/* Inside `render` for Product` */}
+        <div className='middle aligned content'>
           <div className='header'>
             <a onClick={this.handleUpVote}>
               <i className='large caret up icon'/>
