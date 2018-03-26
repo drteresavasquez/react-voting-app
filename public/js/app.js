@@ -88,4 +88,6 @@ class Product extends React.Component {
 //   We need to instruct React to render this ProductList inside a specific DOM
 // node. The code below does this.
 ReactDOM.render(
-  <ProductList/>, document.getElementById('content'));
+  <ProductList/>, 
+  document.getElementById('content')
+);
